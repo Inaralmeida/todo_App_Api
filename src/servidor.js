@@ -1,28 +1,22 @@
 const express = require('express')
 const bodyparser = require('body-parser')
+const cors = require('cors')
+
 const app = express()
 app.use(bodyparser.json())
+app.use(cors())
 const port = 3030
+
 const usuariosController = require('./controllers/usuarios-controller.js')
 const tarefasController = require('./controllers/tarefa-controler.js')
-const bd = require('./infra/bd')
-const TarefasModel = require('./models/tarefas.js')
-const UsuariosModel = require('./models/usuarios.js')
-
-const tarefa_1 = new TarefasModel('Escrever o post', 'Escrever um post usando o circulo dourado', 'Em andamento', '18/01/2019')
-
- bd.usuarios.push(new UsuariosModel('inara', 'ira@gmail.com', '123456'))
-
- module.exports = bd
- console.log(bd)
+const bd = require('./infra/sqlite-db')
 
 usuariosController(app, bd)
-tarefasController(app)
+tarefasController(app, bd)
 
 
 
 
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+app.listen(port, () =>console.log(`[INFO] Servidor roadando na porta: ${port}`)
+)

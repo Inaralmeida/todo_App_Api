@@ -18,5 +18,5 @@ tarefasController(app, bd)
 
 
 
-app.listen(port, () =>console.log(`[INFO] Servidor roadando na porta: ${port}`)
+app.listen(port, () =>console.log(`[INFO] Servidor rodando na porta: ${port}`)
 )

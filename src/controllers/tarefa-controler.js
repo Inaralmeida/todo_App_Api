@@ -1,54 +1,60 @@
 const Tarefas = require('../models/tarefas')
+const tarefasDao = require("../DAO/tarefasDao")
 
 module.exports = (app, bd) => {
   
+  const daoTarefas = new tarefasDao(bd)
+
   //mostra todas as tarefas
-  bd.all('SELECT * FROM TAREFAS', (error, linhas)=>{
-    if (error){
-       throw new Error (`Erro ao rodar consulta: ${error}`)
+  app.get("/tarefas", async(req, res)=>{
+    try{
+
+      const retornoListaDeTarefas = await daoTarefas.listaTarefas()
+      res.send(retornoListaDeTarefas)
+
+    }catch(erro){
+
+      res.send(erro)
+
     }
-    else {
-       app.get ('/tarefas', (req, res) => {
-          res.send(linhas)
-       })
-    }
- })
+  })
+  
+
   
   //mostra tarefas com parametro
-  app.get('/tarefas/:titulo',  (req, res) => {
-    for(let taref of bd.tarefas){
-      if (taref.titulo == req.params.titulo){
-        res.send(taref)
-      }
+  app.get('/tarefas/:titulo', async (req, res) => {
+    try{
+      const retornoBuscaTarefa = await daoTarefas.buscaTarefa(req.params.titulo)
+      res.send(retornoBuscaTarefa)
+    }catch(error){
+      res.send(error)
     }
-    res.send(`Tarefa <strong> ${req.params.titulo}</strong> não encontrada`)
   });
   
   //adciona tarefas
-  app.post('/tarefas', (req, res) => {
-    const tarefa = new Tarefas(req.body.titulo, req.body.descricao, req.body.dataDeCriacao, req.body.status)
-    bd.tarefas.push(tarefa)
-    console.log(tarefa)
-    console.log(bd.tarefas)
-    res.send(`Tarefa <strong>${req.body.titulo}</strong> adicionada`)
+  app.post('/tarefas', async(req, res) => {
+    const tarefa =[req.body.titulo, req.body.descricao, req.body.status, req.body.dataDeCriacao]
+    try{
+      const retornoAdicionaTarefas = await daoTarefas.adicionaTarefa(tarefa)
+      res.send(retornoAdicionaTarefas)
+    }catch(error){
+      res.send(error)
+    }
+    
   })
   
   //deleta tarefas
-  function deletaTarefas(parametro, banco){
-    
-    let tarefasNaoDeletados = []
-    for(let i=0; i < banco.length; i++){
-      if(banco[i].titulo !== parametro){
-        tarefasNaoDeletados.push(banco[i])
-      }
+  app.delete('/tarefas/:titulo', async (req, res)=>{
+  
+    try{
+
+      const retornoDeletaTarefa = await daoTarefas.deletaTarefa(req.params.titulo)
+      res.send(retornoDeletaTarefa)
+    }catch(error){
+      res.send(error)
     }
-    return tarefasNaoDeletados
-  }
-  app.delete('/tarefas/:titulo', (req, res)=>{
     
-    bd.tarefas = deletaTarefas(req.params.titulo, bd.tarefas)
-    res.send(`Tarefa <strong>"${req.params.titulo}"</strong> deletada`)
-    
+  
   })
   
   //atualiza tarefas de acordo com o titulo passado como parametro 
@@ -61,14 +67,13 @@ module.exports = (app, bd) => {
         tarefa.dataDeCriacao = body.dataDeCriacao
       }
     }
-    
+  
   }
   app.put('/tarefas/:titulo', (req, res)=>{
-    
+  
     atualizaTarefa(req.params.titulo, req.body, bd.tarefas)
     res.send(`Os dados da tarefa "<strong>${req.params.titulo}</strong>" foram atualizados com sucesso`)
-    
-    
-  })
   
+  
+  })
 }

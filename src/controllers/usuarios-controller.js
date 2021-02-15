@@ -10,12 +10,19 @@ module.exports = (app, bd) =>{
    const DaoUsuarios = new UsuariosDao(bd)
    
    //Mostra usuarios
-   app.get ('/usuarios', (req, res) => {
-      DaoUsuarios.listaUsuarios()
-      .then( (linhas)=> {res.send(linhas)})
-      .catch( (error)=> { res.send(error)})
+   app.get ('/usuarios', async (req, res) => {
       
-   })
+      try{
+         
+         let listaDeUsuarioRetorno = await DaoUsuarios.listaUsuarios()
+         res.send(listaDeUsuarioRetorno)
+      }
+      catch(error){
+         res.send(error)
+      }
+      
+      
+   })   
    
    //Adiciona usuarios
    app.post('/usuarios', (req, res) => {
@@ -23,8 +30,7 @@ module.exports = (app, bd) =>{
       .then( (feito)=> {res.send(feito)})
       .catch( (error)=> { res.send(error)})
    }) 
-
-
+   
    //mostra usuarios filtrado com parametro :email
    app.get ('/usuarios/:email', (req, res) => {
       
@@ -35,7 +41,7 @@ module.exports = (app, bd) =>{
    
    //deleta usuarios
    // function deletaUsuario(parametro, banco){
-      
+   
    //    let usuariosNaoDeletados = []
    //    for(let i=0; i < banco.length; i++){
    //       if(banco[i].email !== parametro){
@@ -53,19 +59,20 @@ module.exports = (app, bd) =>{
    })
    
    //atualiza usuario de acordo com o email passado como parametro 
-      // function atualizaUsuario(parametro, body, banco){
-      //    for(let usuario of banco){
-      //       if(usuario.email === parametro){
-      //          usuario.nome = body.nome
-      //          usuario.email = body.email
-      //          usuario.senha = body.senha 
-      //       }
-      //    }
-         
-      // }
+   // function atualizaUsuario(parametro, body, banco){
+   //    for(let usuario of banco){
+   //       if(usuario.email === parametro){
+   //          usuario.nome = body.nome
+   //          usuario.email = body.email
+   //          usuario.senha = body.senha 
+   //       }
+   //    }
+   
+   // }
    app.put('/usuarios/:email', (req, res)=>{
       
-      DaoUsuarios.AtualizaUsuario(req.body, req.params.email)
+      const parametro = [req.body.NOME, req.body.EMAIL, req.body.SENHA, req.params.email]
+      DaoUsuarios.AtualizaUsuario(parametro)
       .then((feito)=> res.send(feito))
       .catch((erro)=> res.send(erro))
       

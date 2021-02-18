@@ -7,4 +7,4 @@ Pra que serve
 e a tarefa que deseja adicionar com titulo, descrição, status e data de criação
 como funciona
 A api está no padãro REST então você consegue utilizar através de rotas GET, POST, PUT e DELETE.
-De acordo com a rota voc~e pode apenas visualiar os dados, alterar, inserir ou deletar.
+De acordo com a rota você pode apenas visualiar os dados, alterar, inserir ou deletar.

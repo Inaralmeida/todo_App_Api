@@ -42,7 +42,7 @@ module.exports = class TarefasDao{
 
     atualizaTarefa(parametro){
         return new Promise((resolve, reject)=>{
-            const query = 'UPDATE USUARIOS  SET  TITULO =COALESCE(?,TITULO), DESCRICAO =COALESCE(?,DESCRICAO), STATUS =COALESCE(?,STATUS ), DATACRIACAO =COALESCE(?,DATACRIACAO ) WHERE TITULO= ?'
+            const query = 'UPDATE TAREFAS  SET  TITULO =COALESCE(?,TITULO), DESCRICAO =COALESCE(?,DESCRICAO), STATUS =COALESCE(?,STATUS ), DATACRIACAO =COALESCE(?,DATACRIACAO ) WHERE TITULO= ?'
             this.bd.all(query, parametro, (error, feito)=>{
                 if(error) reject ('Erro ao atualizar tarefa')
                 else resolve ('Tarefa atualizada')

@@ -73,7 +73,7 @@ module.exports = (app, bd) => {
   
     try{
 
-      const tarefa =[req.body.titulo, req.body.descricao, req.body.status, req.body.dataDeCriacao, req.params.titulo]
+      const tarefa =[req.body.TITULO, req.body.DESCRICAO, req.body.STATUS, req.body.DATACRIACAO, req.params.titulo]
       const retornoAtualizaTarefa = await daoTarefas.atualizaTarefa(tarefa)
       res.send(retornoAtualizaTarefa)
 

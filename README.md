@@ -47,7 +47,7 @@ Você pode acessar as rotas diretamente do link: https://stark-springs-00078.her
 * Body-parse
 * Sqlite
 
-## ✒️ Autores
+## ✒️ Autor
 
 * **Inara Almeida** - *Desenvolvimento* - [Inaralmeida](https://github.com/Inaralmeida)
 
